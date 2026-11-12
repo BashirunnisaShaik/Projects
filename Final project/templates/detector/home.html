@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home | Traffic Sign Detection System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero fade-in-up">
+  <div class="hero-grid">
+    <div>
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.85rem; color: #38bdf8; font-weight: 600; margin-bottom: 1.25rem;">
+        <span style="display: inline-block; width: 8px; height: 8px; background-color: #38bdf8; border-radius: 50%; animation: pulseGlow 1.5s infinite;"></span>
+        OpenCV &amp; Computer Vision Powered Web System
+      </div>
+      <h1 class="hero-title" style="font-size: 2.85rem;">
+        Traffic Sign <span>Detection System</span>
+      </h1>
+      <p class="hero-subtitle">
+        An intelligent web-based platform that detects and identifies road traffic signs from uploaded images using Python computer vision, image processing, and machine-assisted contour analysis.
+      </p>
+      <div class="hero-actions">
+        <a href="{% url 'detect' %}" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Start Detection
+        </a>
+        <a href="{% url 'about' %}" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.08); color: #ffffff; border-color: rgba(255,255,255,0.2);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          Learn More / About
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Performance Stats Card -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-value">{{ total_scans }}</div>
+        <div class="stat-label">Total Detections</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ detected_count }}</div>
+        <div class="stat-label">Signs Identified</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ detection_rate }}%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section style="margin-bottom: 4rem;">
+  <div class="section-title-wrap">
+    <h2 class="section-title">Key System Features</h2>
+    <p class="section-subtitle">
+      Designed for fast, reliable, and educational traffic sign recognition with complete road safety guidance.
+    </p>
+  </div>
+
+  <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+    <!-- Feature 1: Fast Detection -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #dbeafe; color: #2563eb;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <h3>Fast Detection</h3>
+      <p>
+        Rapid computer vision algorithms process uploaded road photos in fractions of a second, isolating sign candidates with high efficiency.
+      </p>
+    </div>
+
+    <!-- Feature 2: Traffic Sign Recognition -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #fee2e2; color: #ef4444;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3>Traffic Sign Recognition</h3>
+      <p>
+        Accurately identifies Stop signs, Speed limits, No Entry markers, Turn arrows, Yield signs, and Pedestrian crossings using color and shape analysis.
+      </p>
+    </div>
+
+    <!-- Feature 3: Clear Sign Meaning -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #fef3c7; color: #f59e0b;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <h3>Clear Sign Meaning</h3>
+      <p>
+        Provides clear, plain-language legal definitions for each recognized traffic sign so drivers and learners understand the exact road rule.
+      </p>
+    </div>
+
+    <!-- Feature 4: Driver Action -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #d1fae5; color: #10b981;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      </div>
+      <h3>Driver Action</h3>
+      <p>
+        Specifies actionable driving responses—such as stopping completely, reducing speed, checking mirrors, or yielding precedence.
+      </p>
+    </div>
+
+    <!-- Feature 5: Detection History -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #ede9fe; color: #8b5cf6;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </div>
+      <h3>Detection History</h3>
+      <p>
+        Every completed scan is stored in a relational MySQL database, providing an organized audit log to review past detection outcomes anytime.
+      </p>
+    </div>
+
+    <!-- Feature 6: Processing Time -->
+    <div class="feature-card">
+      <div class="feature-icon-box" style="background-color: #ffedd5; color: #ea580c;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 14 10"></polyline>
+        </svg>
+      </div>
+      <h3>Processing Time</h3>
+      <p>
+        Dynamically benchmarks and displays the exact elapsed processing duration in seconds, offering full visibility into computational speed.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- How The System Works Section -->
+<section style="margin-bottom: 4rem;">
+  <div class="section-title-wrap">
+    <h2 class="section-title">How The System Works</h2>
+    <p class="section-subtitle">
+      A 4-step streamlined image processing and detection pipeline.
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem;">
+    <!-- Step 1 -->
+    <div class="card" style="padding: 1.75rem; text-align: center; border-top: 4px solid var(--primary);">
+      <div style="width: 44px; height: 44px; border-radius: 50%; background: #eff6ff; color: var(--primary); font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+        1
+      </div>
+      <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.5rem;">Upload Image</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+        User selects a road or traffic photograph in JPG, JPEG, or PNG format with instant preview.
+      </p>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="card" style="padding: 1.75rem; text-align: center; border-top: 4px solid #f59e0b;">
+      <div style="width: 44px; height: 44px; border-radius: 50%; background: #fef3c7; color: #b45309; font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+        2
+      </div>
+      <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.5rem;">Preprocess Image</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+        Python and OpenCV convert color space to HSV, apply Gaussian blur, and filter noise.
+      </p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="card" style="padding: 1.75rem; text-align: center; border-top: 4px solid #10b981;">
+      <div style="width: 44px; height: 44px; border-radius: 50%; background: #d1fae5; color: #047857; font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+        3
+      </div>
+      <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.5rem;">Detect Traffic Sign</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+        Contour detection evaluates geometry (circularity, polygons) and classifies the sign candidate.
+      </p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="card" style="padding: 1.75rem; text-align: center; border-top: 4px solid #8b5cf6;">
+      <div style="width: 44px; height: 44px; border-radius: 50%; background: #ede9fe; color: #6d28d9; font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+        4
+      </div>
+      <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.5rem;">Display Meaning &amp; Action</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+        Outputs the annotated image, legal meaning, driver instruction, and execution time in seconds.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: var(--radius-lg); padding: 3rem 2rem; color: #ffffff; text-align: center; box-shadow: var(--shadow-lg);">
+  <h2 style="color: #ffffff; font-size: 2.2rem; margin-bottom: 0.75rem;">
+    Ready to Test Traffic Sign Recognition?
+  </h2>
+  <p style="color: #bfdbfe; font-size: 1.1rem; max-width: 600px; margin: 0 auto 1.75rem;">
+    Upload road photos from your device or browse the comprehensive reference catalog of international road signs.
+  </p>
+  <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+    <a href="{% url 'detect' %}" class="btn btn-secondary btn-lg" style="color: #2563eb; font-weight: 700;">
+      Start Detection Now &rarr;
+    </a>
+    <a href="{% url 'traffic_signs_guide' %}" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.3);">
+      Browse Sign Guide &rarr;
+    </a>
+  </div>
+</section>
+{% endblock %}

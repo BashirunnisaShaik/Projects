@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Project | Traffic Sign Detection System{% endblock %}
+
+{% block content %}
+<div class="fade-in-up">
+
+  <!-- Header Banner -->
+  <div style="margin-bottom: 3rem; text-align: center;">
+    <span class="badge badge-mandatory" style="margin-bottom: 0.75rem;">System Documentation</span>
+    <h1 style="font-size: 2.75rem; margin-bottom: 0.75rem; color: var(--secondary);">About Traffic Sign Detection System</h1>
+    <p style="font-size: 1.15rem; max-width: 800px; margin: 0 auto; line-height: 1.6; color: var(--text-muted);">
+      A complete overview of the concepts, objectives, computer vision methods, and technology architecture behind our intelligent road safety platform.
+    </p>
+  </div>
+
+  <!-- Section 1 & 2: Concepts -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- What is a Traffic Sign? -->
+    <div class="card" style="padding: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 22 22 22"></polygon>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h2 style="font-size: 1.4rem; color: var(--secondary); margin: 0;">What is a Traffic Sign?</h2>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin: 0;">
+        A traffic sign (or road sign) is an internationally standardized visual device erected at the side of or above roads. Traffic signs convey crucial instructions, warnings, speed restrictions, and directional advice to road users using distinct shapes, standard colors, and intuitive pictograms to ensure smooth, orderly, and accident-free transportation.
+      </p>
+    </div>
+
+    <!-- What is Traffic Sign Detection? -->
+    <div class="card" style="padding: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <h2 style="font-size: 1.4rem; color: var(--secondary); margin: 0;">What is Traffic Sign Detection?</h2>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin: 0;">
+        Traffic sign detection is an automated computer vision process that scans input road photographs or camera frames, locates the exact position of traffic signs amidst complex backgrounds (trees, buildings, sky, vehicles), and interprets the recognized symbol to output the sign's identity, meaning, and corresponding driver action.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 3: Objective -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem; border-left: 4px solid var(--primary);">
+    <h2 style="font-size: 1.45rem; color: var(--secondary); margin-bottom: 0.75rem;">Project Objective</h2>
+    <p style="font-size: 0.95rem; line-height: 1.65; color: var(--text-muted); margin-bottom: 1rem;">
+      The primary objective of this project is to develop a user-friendly, web-based Traffic Sign Detection System that allows users to upload any road traffic photograph and receive instant, automated identification of the traffic sign present in the image.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div style="background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem;">
+        <strong>✔ Automated Localization:</strong> Accurately pinpoints traffic signs without requiring manual bounding.
+      </div>
+      <div style="background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem;">
+        <strong>✔ Actionable Guidance:</strong> Provides driver instructions alongside sign definitions.
+      </div>
+      <div style="background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem;">
+        <strong>✔ Relational Persistence:</strong> Stores all detection records, confidence metrics, and processing times in MySQL.
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 & 5: Existing vs Proposed System -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- Existing System -->
+    <div class="card" style="padding: 2rem; border-top: 4px solid var(--accent-red);">
+      <h2 style="font-size: 1.35rem; color: var(--secondary); margin-bottom: 0.75rem;">Existing System &amp; Limitations</h2>
+      <p style="font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.75rem;">
+        Traditional road navigation relies entirely on human driver eyesight and manual identification:
+      </p>
+      <ul style="list-style-position: inside; font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <li>Drivers can easily miss signs due to fatigue, distraction, or poor weather conditions.</li>
+        <li>Night-time driving, sun glare, and obstructions increase human error risk.</li>
+        <li>Traditional manual inspection methods lack centralized digital logging or historical auditing.</li>
+        <li>Driver hesitation when encountering unfamiliar signs causes traffic delays or accidents.</li>
+      </ul>
+    </div>
+
+    <!-- Proposed System -->
+    <div class="card" style="padding: 2rem; border-top: 4px solid var(--accent-green);">
+      <h2 style="font-size: 1.35rem; color: var(--secondary); margin-bottom: 0.75rem;">Proposed System</h2>
+      <p style="font-size: 0.92rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.75rem;">
+        The proposed web-based system overcomes these limitations by combining computer vision and modern web technology:
+      </p>
+      <ul style="list-style-position: inside; font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <li>Users upload road photos directly through an intuitive browser interface.</li>
+        <li>Python and OpenCV image processing automatically decode, filter, and segment the image.</li>
+        <li>Multi-channel HSV color thresholding, Canny edge detection, and polygon approximation recognize the sign.</li>
+        <li>Dynamically benchmarks processing time and persists all records in a MySQL database.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 6: Methods -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 0.75rem;">Computer Vision Methods Implemented</h2>
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      The core detection pipeline applies several fundamental image-processing techniques:
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      <div style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.4rem;">1. Image Preprocessing</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Resizes uploaded images to standard dimensions, converts color spaces (BGR to Grayscale/HSV), reduces asphalt grain via Gaussian blur, and sharpens low-contrast signs using CLAHE.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.1rem; color: var(--accent-red); margin-bottom: 0.4rem;">2. Color Detection</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Isolates standardized sign pigments in the HSV color space: Red (Stop, Yield, Speed Limit), Blue (Mandatory Turn/Roundabout), and Yellow (Caution/Hazard).
+        </p>
+      </div>
+
+      <div style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.1rem; color: var(--accent-yellow); margin-bottom: 0.4rem;">3. Edge Detection</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Applies the Canny edge detector and gradient operators to trace distinct boundaries and sharp contrasts separating the sign from the roadside backdrop.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.1rem; color: var(--accent-green); margin-bottom: 0.4rem;">4. Shape Detection</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Uses Douglas-Peucker polygon approximation (<code>approxPolyDP</code>) and circularity ratio \(4\pi \times \text{Area} / \text{Perimeter}^2\) to distinguish Octagons, Circles, and Triangles.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-alt); padding: 1.25rem; border-radius: var(--radius-md);">
+        <h3 style="font-size: 1.1rem; color: #8b5cf6; margin-bottom: 0.4rem;">5. Traffic Sign Recognition</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+          Examines internal Region of Interest (ROI) features—such as horizontal bars for No Entry, numeric text for Speed Limits, and directional pixel moments for Left/Right arrows.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7: Advantages -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 1.25rem;">Key System Advantages</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Fast Detection:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Completes image decoding, contour detection, and recognition in fractions of a second.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Easy to Use:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Intuitive drag-and-drop web UI with live preview and one-click demo samples.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Clear Result:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Highlights sign with bounding boxes and provides clear driver instructions.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Reduces Manual Effort:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Automates sign localization without human intervention or manual inspection.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Useful Sign Information:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Explains what each sign means and what action the driver must take.</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+        <span style="color: #10b981; font-weight: bold; font-size: 1.2rem;">✔</span>
+        <div>
+          <strong>Stores Previous Results:</strong>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Persists complete scan history with timestamps in MySQL for auditing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 8: Technologies Used -->
+  <div class="card" style="padding: 2rem; margin-bottom: 3rem;">
+    <h2 style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 1.25rem;">Technologies Used</h2>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-color); color: var(--secondary);">
+            <th style="padding: 0.75rem;">Technology</th>
+            <th style="padding: 0.75rem;">Role in Project</th>
+            <th style="padding: 0.75rem;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">HTML5</td>
+            <td style="padding: 0.75rem;">Structure &amp; Layout</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Provides clean, semantic markup for all web templates, forms, and results.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">CSS3</td>
+            <td style="padding: 0.75rem;">Styling &amp; Theme</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Custom responsive styling, cards, badges, and road/traffic-inspired aesthetics.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">JavaScript</td>
+            <td style="padding: 0.75rem;">Client Interactions</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Client-side image preview, drag-and-drop validation, and interactive tab switches.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">Python</td>
+            <td style="padding: 0.75rem;">Programming Language</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Core language powering backend routing, image decoding, and detection algorithms.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">Django</td>
+            <td style="padding: 0.75rem;">Web Framework</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Robust MVC framework providing authentication, security, URL routing, and ORM.</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">OpenCV</td>
+            <td style="padding: 0.75rem;">Computer Vision Engine</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">High-performance library for image decoding, HSV segmentation, and contours.</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.75rem; font-weight: 700; color: var(--secondary);">MySQL</td>
+            <td style="padding: 0.75rem;">Relational Database</td>
+            <td style="padding: 0.75rem; color: var(--text-muted);">Persists user accounts, scan records, processing times, and detection history.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

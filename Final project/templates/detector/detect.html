@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Traffic Sign Detection | Upload Image{% endblock %}
+
+{% block content %}
+<div class="upload-wrapper fade-in-up">
+
+  <!-- Section Header -->
+  <div style="text-align: center; margin-bottom: 2.5rem;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Traffic Sign Detection Studio</h1>
+    <p style="font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+      Upload a road or dashcam image to detect, localize, and recognize traffic signs using Python image processing.
+    </p>
+  </div>
+
+  <!-- Main Upload Card -->
+  <div class="card">
+    <form method="POST" enctype="multipart/form-data" id="detectionUploadForm" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.title.id_for_label }}">Scan Label / Location (Optional)</label>
+        {{ form.title }}
+        {% if form.title.errors %}
+          <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.25rem;">
+            {{ form.title.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div class="form-group">
+        <label class="form-label">Road Image File <span style="color: var(--accent-red);">*</span></label>
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="dropzone-title">Click to Browse or Drag &amp; Drop Image Here</div>
+          <div class="dropzone-hint">Supports JPG, JPEG, and PNG files up to 10 MB</div>
+          <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 0.5rem;"
+            onclick="document.getElementById('image-upload-input').click();">
+            Select from Device
+          </button>
+          {{ form.original_image }}
+        </div>
+        {% if form.original_image.errors %}
+          <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.5rem;">
+            {{ form.original_image.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Live Image Preview -->
+      <div class="preview-card" id="previewCard" style="display: none;">
+        <h4 style="font-size: 1.05rem; margin-bottom: 1rem; color: var(--secondary);">Selected Image Preview</h4>
+        <div class="preview-grid">
+          <div class="preview-thumb-wrap">
+            <img id="previewImg" src="" alt="Selected Image Preview">
+          </div>
+          <div>
+            <ul class="preview-meta-list">
+              <li>
+                <span>File Name:</span>
+                <strong id="previewName">-</strong>
+              </li>
+              <li>
+                <span>File Size:</span>
+                <strong id="previewSize">-</strong>
+              </li>
+              <li>
+                <span>Dimensions:</span>
+                <strong id="previewDimensions">-</strong>
+              </li>
+              <li>
+                <span>Engine Status:</span>
+                <strong style="color: var(--accent-green);">Ready for Computer Vision Analysis</strong>
+              </li>
+            </ul>
+
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap;">
+              <button type="submit" class="btn btn-primary" id="startDetectBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Run Traffic Sign Detection
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" id="clearPreviewBtn">
+                Remove / Change
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Quick Test Gallery -->
+    {% if sample_files %}
+    <div class="sample-gallery">
+      <div class="sample-gallery-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        Instant Test Samples (1-Click Run)
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Click any sample below to test the detection algorithm instantly:
+      </p>
+
+      <div class="samples-grid">
+        {% for sample in sample_files %}
+          <form method="POST" class="sample-submit-form" style="margin: 0;">
+            {% csrf_token %}
+            <input type="hidden" name="sample_choice" value="{{ sample }}">
+            <button type="submit" class="sample-card-btn" title="Click to test {{ sample }}">
+              <img src="{% static 'images/sample_signs/' %}{{ sample }}" alt="{{ sample }}">
+              <span>
+                {{ sample|cut:"sample_"|cut:".jpg"|title }}
+              </span>
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<!-- Processing Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--secondary);">Processing Image...</h3>
+    <p id="loadingStatusText" style="font-size: 0.95rem; color: var(--primary); font-weight: 600;">
+      Reading uploaded road image...
+    </p>
+    <p style="font-size: 0.82rem; color: var(--text-light); margin-top: 1rem;">
+      Executing Python computer vision pipeline. Please wait...
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/upload.js' %}"></script>
+{% endblock %}

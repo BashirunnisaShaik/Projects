@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Traffic Sign Guide | Traffic Sign Detection System{% endblock %}
+
+{% block content %}
+<div class="fade-in-up">
+
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <span class="badge badge-mandatory" style="margin-bottom: 0.75rem;">Educational Road Safety Catalog</span>
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--secondary);">Traffic Sign Reference Guide</h1>
+    <p style="font-size: 1.05rem; max-width: 750px; margin: 0 auto; color: var(--text-muted);">
+      Explore international standardized road traffic signs, their legal meanings, and the specific actions required of drivers to ensure safe road navigation.
+    </p>
+  </div>
+
+  <!-- Sign Category Groups -->
+  {% for cat_key, cat_data in categories.items %}
+    {% if cat_data.signs %}
+      <section style="margin-bottom: 3.5rem;">
+        <div style="display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">
+          <h2 style="font-size: 1.6rem; color: var(--secondary);">{{ cat_data.title }}</h2>
+          <span class="badge {{ cat_data.badge_class }}">{{ cat_data.signs|length }} Signs</span>
+        </div>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          {{ cat_data.description }}
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+          {% for sign in cat_data.signs %}
+            <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                  {% if sign.sample_image %}
+                    <img src="{% static 'images/sample_signs/' %}{{ sign.sample_image }}" alt="{{ sign.name }}"
+                         style="width: 58px; height: 58px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); flex-shrink: 0; box-shadow: var(--shadow-sm);">
+                  {% else %}
+                    <div style="width: 58px; height: 58px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; border: 1px solid var(--border-color);">
+                      {% if sign.category == 'warning' %}⚠️{% elif sign.category == 'prohibitory' %}🚫{% elif sign.category == 'mandatory' %}🔵{% elif sign.category == 'informative' %}ℹ️{% else %}🛑{% endif %}
+                    </div>
+                  {% endif %}
+                  <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                      <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.2rem;">
+                        {{ sign.name }}
+                      </h3>
+                      <span class="badge {{ cat_data.badge_class }}">{{ sign.shape }}</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">
+                      <strong>Shape:</strong> {{ sign.shape }} &bull; <strong>Color:</strong> {{ sign.color }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Meaning Box -->
+                <div style="background-color: var(--bg-alt); padding: 0.85rem 1rem; border-radius: var(--radius-sm); margin-bottom: 0.75rem;">
+                  <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; letter-spacing: 0.05em;">
+                    📖 Meaning
+                  </div>
+                  <div style="font-size: 0.9rem; color: var(--secondary); line-height: 1.5;">
+                    {{ sign.meaning }}
+                  </div>
+                </div>
+
+                <!-- Driver Action Box -->
+                <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 0.85rem 1rem; border-radius: var(--radius-sm);">
+                  <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #047857; margin-bottom: 0.2rem; letter-spacing: 0.05em;">
+                    🚗 Driver Action
+                  </div>
+                  <div style="font-size: 0.9rem; color: #065f46; line-height: 1.5;">
+                    {{ sign.driver_action }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+
+  <!-- Bottom CTA -->
+  <div style="background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: var(--radius-lg); padding: 2.5rem 2rem; color: #ffffff; text-align: center; margin-top: 2rem;">
+    <h3 style="color: #ffffff; font-size: 1.75rem; margin-bottom: 0.5rem;">Have a road image to analyze?</h3>
+    <p style="color: #bfdbfe; font-size: 1rem; margin-bottom: 1.5rem;">
+      Upload your traffic image to our Computer Vision Engine to automatically detect and recognize signs in real-time.
+    </p>
+    {% if user.is_authenticated %}
+      <a href="{% url 'detect' %}" class="btn btn-secondary btn-lg" style="color: #2563eb; font-weight: 700;">
+        Open Detection Studio &rarr;
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-secondary btn-lg" style="color: #2563eb; font-weight: 700;">
+        Login to Start Detection &rarr;
+      </a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

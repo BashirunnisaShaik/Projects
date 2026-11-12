@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detection Result | {{ detection.sign_name }}{% endblock %}
+
+{% block content %}
+<div class="fade-in-up">
+
+  <!-- Header Banner -->
+  <div class="result-header">
+    <div class="result-header-flex">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+          <span class="badge badge-{{ detection.category }}">
+            {{ detection.get_category_display }}
+          </span>
+          <span style="font-size: 0.85rem; color: #94a3b8;">
+            Scan ID #{{ detection.id }} &bull; {{ detection.created_at|date:"M d, Y &middot; H:i:s" }}
+          </span>
+        </div>
+        <h1 class="result-sign-title">
+          {% if detection.sign_detected %}
+            Detected Sign: <span>{{ detection.sign_name }}</span>
+          {% else %}
+            <span>Traffic sign could not be identified confidently.</span>
+          {% endif %}
+        </h1>
+        <p style="color: #cbd5e1; font-size: 0.95rem; margin: 0;">
+          {{ detection.title|default:"Road Image Inspection" }}
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-start;">
+        <a href="{% url 'detect' %}" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Detect Another Image
+        </a>
+        <button type="button" class="btn btn-secondary" onclick="window.print()"
+          style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.2);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Print Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Info Row: Meaning & Driver Action -->
+  {% if detection.sign_detected %}
+  <div class="sign-info-row">
+
+    <div class="sign-info-box sign-info-meaning">
+      <div class="sign-info-label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        Sign Meaning
+      </div>
+      <p class="sign-info-text">
+        {{ detection.meaning|default:"This sign carries a regulatory or safety instruction for road users." }}
+      </p>
+    </div>
+
+    <div class="sign-info-box sign-info-action">
+      <div class="sign-info-label">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        Driver Action
+      </div>
+      <p class="sign-info-text">
+        {{ detection.driver_action|default:"Follow the instruction indicated by this traffic sign immediately." }}
+      </p>
+    </div>
+
+  </div>
+  {% else %}
+  <!-- No Detection Notice -->
+  <div class="sign-info-row">
+    <div class="sign-info-box" style="grid-column: 1 / -1; border-left: 4px solid var(--accent-yellow); background: #fffbeb;">
+      <div class="sign-info-label" style="color: #92400e;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        Detection Notice
+      </div>
+      <p class="sign-info-text" style="color: #78350f;">
+        {{ detection.description|default:"Traffic sign could not be identified confidently. Try uploading a clearer image with a visible sign." }}
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Main Result Grid -->
+  <div class="result-grid">
+
+    <!-- Left Column: Image Viewer -->
+    <div class="image-comparison-card">
+      <div class="image-viewer-header">
+        <span style="font-weight: 700; font-size: 0.95rem; color: var(--secondary);">
+          Image Inspection View
+        </span>
+        <div class="image-tabs">
+          {% if detection.processed_image %}
+            <button class="image-tab-btn active" data-target="annotatedView">
+              Detected &amp; Annotated
+            </button>
+          {% endif %}
+          <button class="image-tab-btn {% if not detection.processed_image %}active{% endif %}" data-target="originalView">
+            Original Upload
+          </button>
+        </div>
+      </div>
+
+      <div class="image-display-frame">
+        {% if detection.processed_image %}
+          <div id="annotatedView" class="image-view-target" style="width:100%;height:100%;text-align:center;">
+            <img src="{{ detection.processed_image.url }}" alt="Annotated Detection Result">
+          </div>
+        {% endif %}
+        <div id="originalView" class="image-view-target"
+          style="width:100%;height:100%;text-align:center;{% if detection.processed_image %}display:none;{% endif %}">
+          <img src="{{ detection.original_image.url }}" alt="Original Uploaded Image">
+        </div>
+      </div>
+
+      <div style="padding:1rem 1.5rem;background:#f8fafc;border-top:1px solid var(--border-color);
+                  display:flex;justify-content:space-between;align-items:center;
+                  font-size:0.88rem;flex-wrap:wrap;gap:0.5rem;">
+        <span style="color:var(--text-muted);">
+          Filename: <strong>{{ detection.filename }}</strong>
+        </span>
+        {% if detection.processed_image %}
+          <a href="{{ detection.processed_image.url }}" download class="btn btn-secondary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download Processed Image
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Column: Metrics -->
+    <div>
+      <div class="metrics-card">
+        <h3 style="font-size:1.25rem;margin-bottom:1.25rem;color:var(--secondary);">
+          Detection Metrics &amp; Analytics
+        </h3>
+
+        <!-- Cropped Sign ROI Thumbnail -->
+        {% if detection.cropped_sign %}
+          <div class="crop-preview-box" title="Cropped Region of Interest (ROI)">
+            <img src="{{ detection.cropped_sign.url }}" alt="Cropped Sign ROI">
+          </div>
+          <div style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:-1rem;margin-bottom:1.25rem;">
+            Extracted Region of Interest (ROI)
+          </div>
+        {% endif %}
+
+        <!-- Confidence Score -->
+        {% if detection.sign_detected %}
+          <div class="confidence-bar-wrap">
+            <div class="confidence-bar-label">
+              <span>Detection Confidence</span>
+              <strong style="color:var(--accent-green);">{{ detection.confidence }}%</strong>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:{{ detection.confidence }}%;"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Metrics Table -->
+        <div class="metric-row">
+          <span class="metric-label">Detection Status</span>
+          <span class="metric-value">
+            {% if detection.sign_detected %}
+              <span style="color:var(--accent-green);">&#10004; Sign Identified</span>
+            {% else %}
+              <span style="color:var(--accent-red);">&#10008; None Identified</span>
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Sign Name</span>
+          <span class="metric-value" style="color:var(--primary);font-weight:700;">
+            {% if detection.sign_detected %}
+              {{ detection.sign_name }}
+            {% else %}
+              <span style="color:var(--text-muted);font-weight:500;">Traffic sign could not be identified confidently.</span>
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Category</span>
+          <span class="metric-value">
+            <strong>{{ category_display|default:detection.get_category_display }}</strong>
+            {% if category_explanation %}
+              <div style="font-size:0.84rem;color:var(--text-muted);font-weight:normal;margin-top:0.25rem;line-height:1.4;">
+                &mdash; {{ category_explanation }}
+              </div>
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Detected Shape</span>
+          <span class="metric-value">{{ detection.detected_shape }}</span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Dominant Color</span>
+          <span class="metric-value">{{ detection.dominant_color }}</span>
+        </div>
+
+        {% if detection.bounding_box %}
+        <div class="metric-row">
+          <span class="metric-label">Bounding Box (x, y, w, h)</span>
+          <span class="metric-value" style="font-family:monospace;font-size:0.85rem;">{{ detection.bounding_box }}</span>
+        </div>
+        {% endif %}
+
+        <div class="metric-row">
+          <span class="metric-label">Processing Time</span>
+          <span class="metric-value" style="color:var(--primary);font-weight:600;">
+            {{ detection.processing_time }} seconds
+          </span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Detection Date &amp; Time</span>
+          <span class="metric-value">{{ detection.created_at|date:"M d, Y, H:i:s" }}</span>
+        </div>
+
+        <div class="metric-row">
+          <span class="metric-label">Database Status</span>
+          <span class="metric-value" style="color:var(--accent-green);">Saved to MySQL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div style="display:flex;justify-content:space-between;align-items:center;
+              border-top:1px solid var(--border-color);padding-top:1.5rem;flex-wrap:wrap;gap:0.75rem;">
+    <a href="{% url 'history' %}" class="btn btn-secondary">
+      &larr; Back to Detection History
+    </a>
+    <a href="{% url 'detect' %}" class="btn btn-primary">
+      Scan New Road Image &rarr;
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Image tab switching
+  document.querySelectorAll('.image-tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.image-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.image-view-target').forEach(function(v) { v.style.display = 'none'; });
+      btn.classList.add('active');
+      var t = document.getElementById(btn.getAttribute('data-target'));
+      if (t) t.style.display = 'block';
+    });
+  });
+</script>
+{% endblock %}

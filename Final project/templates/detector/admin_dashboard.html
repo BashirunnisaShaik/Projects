@@ -1,0 +1,454 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard | Traffic Sign Detection System{% endblock %}
+
+{% block content %}
+<div class="fade-in-up">
+
+  <!-- Admin Welcome Banner -->
+  <div class="hero" style="padding: 2.5rem 2rem; margin-bottom: 2.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; position: relative; z-index: 1;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.82rem; color: #38bdf8; font-weight: 600; margin-bottom: 0.75rem;">
+          🛡️ Administrator Control Console
+        </div>
+        <h1 style="color: #ffffff; font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem;">
+          Admin Dashboard
+        </h1>
+        <p style="color: #94a3b8; font-size: 1.05rem; margin: 0; max-width: 680px;">
+          Centralized management interface for registered users, complete detection histories, dynamic computer vision benchmarks, and visitor feedback.
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="#user-details" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.08); color: #ffffff; border-color: rgba(255,255,255,0.2);">
+          User Details
+        </a>
+        <a href="#detection-history" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.08); color: #ffffff; border-color: rgba(255,255,255,0.2);">
+          Detection History
+        </a>
+        <a href="#feedback" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.08); color: #ffffff; border-color: rgba(255,255,255,0.2);">
+          Feedback
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Statistics Cards (Live Database Values) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    <!-- Card 1: Total Users -->
+    <div class="card" style="padding: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Users</span>
+        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: var(--secondary);">{{ total_users }}</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Registered driver accounts</div>
+    </div>
+
+    <!-- Card 2: Total Detections -->
+    <div class="card" style="padding: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Detections</span>
+        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: #ede9fe; color: #8b5cf6; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: #8b5cf6;">{{ total_detections }}</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">All-time database scans</div>
+    </div>
+
+    <!-- Card 3: Today's Detections -->
+    <div class="card" style="padding: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Today's Detections</span>
+        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: #fef3c7; color: #f59e0b; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: #d97706;">{{ today_detections_count }}</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Scans processed today ({{ today_date|date:"M d, Y" }})</div>
+    </div>
+
+    <!-- Card 4: Total Feedback -->
+    <div class="card" style="padding: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Feedback</span>
+        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: #d1fae5; color: #10b981; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: #10b981;">{{ total_feedback }}</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Submissions from users &amp; visitors</div>
+    </div>
+
+    <!-- Card 5: Average Processing Time -->
+    <div class="card" style="padding: 1.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Avg Processing Time</span>
+        <div style="width: 40px; height: 40px; border-radius: var(--radius-md); background: #ccfbf1; color: #0f766e; display: flex; align-items: center; justify-content: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: #0f766e;">{{ avg_processing_time }}s</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Actual OpenCV execution benchmark</div>
+    </div>
+  </div>
+
+  <!-- SECTION A: USER DETAILS -->
+  <section id="user-details" style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="font-size: 1.6rem; color: var(--secondary); margin-bottom: 0.25rem;">User Details</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
+          All registered user accounts stored in the Django authentication database.
+        </p>
+      </div>
+      <span class="badge badge-mandatory">{{ users_list|length }} Registered Users</span>
+    </div>
+
+    <div class="card" style="padding: 0; overflow-x: auto;">
+      <table class="history-table" style="margin: 0;">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Registration Date</th>
+            <th>Total Detections</th>
+            <th>Account Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users_list %}
+            <tr>
+              <td>
+                <strong>{{ u.username }}</strong>
+                {% if u.is_superuser %}
+                  <span class="badge badge-regulatory" style="margin-left: 0.5rem; font-size: 0.7rem;">Superuser</span>
+                {% elif u.is_staff %}
+                  <span class="badge badge-warning" style="margin-left: 0.5rem; font-size: 0.7rem;">Staff</span>
+                {% endif %}
+              </td>
+              <td style="color: var(--text-muted);">{{ u.email|default:"Not specified" }}</td>
+              <td style="font-size: 0.88rem; color: var(--text-muted);">{{ u.date_joined|date:"M d, Y · H:i" }}</td>
+              <td>
+                <span style="font-weight: 700; color: var(--primary);">{{ u.detection_count }}</span>
+              </td>
+              <td>
+                {% if u.is_active %}
+                  <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #059669; font-weight: 600; font-size: 0.85rem;">
+                    <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span> Active
+                  </span>
+                {% else %}
+                  <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #dc2626; font-weight: 600; font-size: 0.85rem;">
+                    <span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%;"></span> Inactive
+                  </span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                No registered users found.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION D: TODAY'S DETECTIONS -->
+  <section id="todays-detections" style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="font-size: 1.6rem; color: var(--secondary); margin-bottom: 0.25rem;">Today's Detections</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
+          All traffic signs scanned today ({{ today_date|date:"F d, Y" }}) across all users.
+        </p>
+      </div>
+      <span class="badge badge-warning">{{ today_detections_count }} Today</span>
+    </div>
+
+    {% if today_detections %}
+      <div class="card" style="padding: 0; overflow-x: auto;">
+        <table class="history-table" style="margin: 0;">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Image</th>
+              <th>User</th>
+              <th>Detected Sign</th>
+              <th>Category</th>
+              <th>Confidence</th>
+              <th>Processing Time</th>
+              <th>Timestamp</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in today_detections %}
+              <tr>
+                <td>
+                  <div style="width: 50px; height: 40px; border-radius: var(--radius-sm); overflow: hidden; background: #0f172a;">
+                    {% if item.cropped_sign %}
+                      <img src="{{ item.cropped_sign.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% elif item.processed_image %}
+                      <img src="{{ item.processed_image.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                      <img src="{{ item.original_image.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% endif %}
+                  </div>
+                </td>
+                <td>
+                  <strong>{{ item.user.username|default:"Anonymous" }}</strong>
+                </td>
+                <td>
+                  <strong style="color: var(--secondary);">{{ item.sign_name }}</strong>
+                </td>
+                <td>
+                  <span class="badge badge-{{ item.category }}">{{ item.get_category_display }}</span>
+                </td>
+                <td>
+                  {% if item.sign_detected %}
+                    <span style="color: var(--accent-green); font-weight: 700;">{{ item.confidence }}%</span>
+                  {% else %}
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">N/A</span>
+                  {% endif %}
+                </td>
+                <td style="font-size: 0.88rem; color: var(--text-muted);">{{ item.processing_time }}s</td>
+                <td style="font-size: 0.85rem; color: var(--text-muted);">{{ item.created_at|date:"H:i:s" }}</td>
+                <td>
+                  <a href="{% url 'detection_result' item.id %}" class="btn btn-secondary btn-sm">Inspect</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+        No detections logged today yet.
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- SECTION B: DETECTION HISTORY (ALL USERS) -->
+  <section id="detection-history" style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="font-size: 1.6rem; color: var(--secondary); margin-bottom: 0.25rem;">Detection History</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
+          Comprehensive detection records from all registered users with search and category filtering.
+        </p>
+      </div>
+
+      <!-- Search & Filters -->
+      <form method="GET" action="{% url 'admin_dashboard' %}#detection-history" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 0;">
+        <input type="text" name="q" value="{{ history_search }}" placeholder="Search user, sign, title..." class="form-control" style="width: 220px; font-size: 0.88rem; padding: 0.45rem 0.75rem;">
+        <select name="category" class="form-control" style="width: auto; font-size: 0.88rem; padding: 0.45rem 1.5rem 0.45rem 0.75rem;">
+          <option value="all" {% if not history_cat or history_cat == 'all' %}selected{% endif %}>All Categories</option>
+          <option value="regulatory" {% if history_cat == 'regulatory' %}selected{% endif %}>Regulatory</option>
+          <option value="prohibitory" {% if history_cat == 'prohibitory' %}selected{% endif %}>Prohibitory</option>
+          <option value="warning" {% if history_cat == 'warning' %}selected{% endif %}>Warning</option>
+          <option value="mandatory" {% if history_cat == 'mandatory' %}selected{% endif %}>Mandatory</option>
+          <option value="informative" {% if history_cat == 'informative' %}selected{% endif %}>Information</option>
+          <option value="none" {% if history_cat == 'none' %}selected{% endif %}>No Sign Detected</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        {% if history_search or history_cat %}
+          <a href="{% url 'admin_dashboard' %}#detection-history" class="btn btn-secondary btn-sm">Reset</a>
+        {% endif %}
+      </form>
+    </div>
+
+    <div class="card" style="padding: 0; overflow-x: auto;">
+      <table class="history-table" style="margin: 0;">
+        <thead>
+          <tr>
+            <th style="width: 70px;">Image</th>
+            <th>User</th>
+            <th>Detected Sign</th>
+            <th>Category</th>
+            <th>Specific Meaning</th>
+            <th>Driver Action</th>
+            <th>Confidence</th>
+            <th>Processing Time</th>
+            <th>Date &amp; Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in all_detections %}
+            <tr>
+              <td>
+                <div style="width: 50px; height: 40px; border-radius: var(--radius-sm); overflow: hidden; background: #0f172a;">
+                  {% if item.cropped_sign %}
+                    <img src="{{ item.cropped_sign.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  {% elif item.processed_image %}
+                    <img src="{{ item.processed_image.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  {% else %}
+                    <img src="{{ item.original_image.url }}" alt="{{ item.sign_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  {% endif %}
+                </div>
+              </td>
+              <td>
+                <strong>{{ item.user.username|default:"Anonymous" }}</strong>
+              </td>
+              <td>
+                <strong style="color: var(--secondary);">{{ item.sign_name }}</strong>
+              </td>
+              <td>
+                <span class="badge badge-{{ item.category }}">{{ item.get_category_display }}</span>
+              </td>
+              <td style="font-size: 0.85rem; color: var(--text-muted); max-width: 180px;">
+                {{ item.meaning|default:"-"|truncatechars:65 }}
+              </td>
+              <td style="font-size: 0.85rem; color: var(--text-muted); max-width: 180px;">
+                {{ item.driver_action|default:"-"|truncatechars:65 }}
+              </td>
+              <td>
+                {% if item.sign_detected %}
+                  <span style="color: var(--accent-green); font-weight: 700;">{{ item.confidence }}%</span>
+                {% else %}
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">N/A</span>
+                {% endif %}
+              </td>
+              <td style="font-size: 0.88rem; color: var(--text-muted);">{{ item.processing_time }}s</td>
+              <td style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">
+                {{ item.created_at|date:"M d, Y · H:i" }}
+              </td>
+              <td>
+                <div style="display: flex; gap: 0.35rem; align-items: center;">
+                  <a href="{% url 'detection_result' item.id %}" class="btn btn-primary btn-sm">Inspect</a>
+                  <form method="POST" action="{% url 'delete_detection' item.id %}" class="delete-form" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--accent-red); padding: 0.35rem 0.6rem;" title="Delete Record">
+                      &times;
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="10" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                No detection records found in database.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination for Admin All Detections -->
+    {% if all_detections.has_other_pages %}
+      <ul class="pagination" style="margin-top: 1.5rem;">
+        {% if all_detections.has_previous %}
+          <li>
+            <a href="?page={{ all_detections.previous_page_number }}{% if history_search %}&q={{ history_search }}{% endif %}{% if history_cat %}&category={{ history_cat }}{% endif %}#detection-history" class="page-link">&laquo; Prev</a>
+          </li>
+        {% endif %}
+        {% for num in all_detections.paginator.page_range %}
+          {% if all_detections.number == num %}
+            <li><span class="page-link active">{{ num }}</span></li>
+          {% elif num > all_detections.number|add:'-3' and num < all_detections.number|add:'3' %}
+            <li>
+              <a href="?page={{ num }}{% if history_search %}&q={{ history_search }}{% endif %}{% if history_cat %}&category={{ history_cat }}{% endif %}#detection-history" class="page-link">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if all_detections.has_next %}
+          <li>
+            <a href="?page={{ all_detections.next_page_number }}{% if history_search %}&q={{ history_search }}{% endif %}{% if history_cat %}&category={{ history_cat }}{% endif %}#detection-history" class="page-link">Next &raquo;</a>
+          </li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  </section>
+
+  <!-- SECTION C: FEEDBACK (Exact heading "Feedback") -->
+  <section id="feedback" style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <div>
+        <h2 style="font-size: 1.6rem; color: var(--secondary); margin-bottom: 0.25rem;">Feedback</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
+          All user feedback and visitor reviews dynamically fetched from the MySQL database.
+        </p>
+      </div>
+      <span class="badge badge-information">{{ feedbacks|length }} Submissions</span>
+    </div>
+
+    {% if feedbacks %}
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for fb in feedbacks %}
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <h4 style="font-size: 1.1rem; color: var(--secondary); margin: 0 0 0.2rem 0;">{{ fb.name }}</h4>
+                  <div style="font-size: 0.82rem; color: var(--text-muted);">
+                    {{ fb.email|default:"Visitor (No email provided)" }}
+                  </div>
+                </div>
+                <!-- Star Rating Display -->
+                <div style="color: #f59e0b; font-size: 1.1rem; letter-spacing: 2px;" title="{{ fb.rating }} of 5 stars">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Feedback Message -->
+              <p style="font-size: 0.92rem; line-height: 1.6; color: var(--text-main); background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-sm); margin: 0.75rem 0;">
+                "{{ fb.message }}"
+              </p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem;">
+              <span>
+                {% if fb.user %}
+                  👤 Logged-in User ({{ fb.user.username }})
+                {% else %}
+                  🌐 Public Visitor
+                {% endif %}
+              </span>
+              <span>{{ fb.created_at|date:"M d, Y · H:i" }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card" style="padding: 3rem 2rem; text-align: center;">
+        <div style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 0.5rem;">💬</div>
+        <h3 style="font-size: 1.25rem; color: var(--secondary); margin-bottom: 0.35rem;">No feedback available yet.</h3>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin: 0;">
+          Submitted user reviews and visitor inquiries will be dynamically displayed in this section.
+        </p>
+      </div>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

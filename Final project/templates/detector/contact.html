@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact &amp; Team | Traffic Sign Detection System{% endblock %}
+
+{% block content %}
+<div class="fade-in-up">
+
+  <!-- Header Banner -->
+  <div style="text-align: center; margin-bottom: 3rem;">
+    <span class="badge badge-mandatory" style="margin-bottom: 0.75rem;">Get in Touch</span>
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Contact &amp; Project Inquiries</h1>
+    <p style="font-size: 1.05rem; max-width: 650px; margin: 0 auto;">
+      Have questions regarding the Traffic Sign Detection System, computer vision algorithms, or deployment? Send us a message below.
+    </p>
+  </div>
+
+  <div class="contact-grid">
+
+    <!-- Contact Form Card -->
+    <div class="card">
+      <h2 style="font-size: 1.45rem; margin-bottom: 1.25rem; color: var(--secondary);">Send a Message</h2>
+      <form method="POST" action="{% url 'contact' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.name.id_for_label }}">Full Name *</label>
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.25rem;">
+              {{ form.name.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.email.id_for_label }}">Email Address *</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.25rem;">
+              {{ form.email.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.subject.id_for_label }}">Subject *</label>
+          {{ form.subject }}
+          {% if form.subject.errors %}
+            <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.25rem;">
+              {{ form.subject.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="{{ form.message.id_for_label }}">Your Message *</label>
+          {{ form.message }}
+          {% if form.message.errors %}
+            <div style="color: var(--accent-red); font-size: 0.85rem; margin-top: 0.25rem;">
+              {{ form.message.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          Send Inquiry
+        </button>
+      </form>
+    </div>
+
+    <!-- Project Team & Guide Information Card -->
+    <div>
+      <div class="contact-info-card" style="margin-bottom: 1.5rem;">
+        <h3>Project Information</h3>
+        <p>
+          Final Year Engineering Project demonstration in Computer Vision and Web Application Architecture.
+        </p>
+
+        <ul class="contact-detail-list">
+          <li class="contact-detail-item">
+            <div class="contact-icon-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div>
+              <strong style="color: #ffffff; display: block; font-size: 0.95rem;">Project Domain</strong>
+              <span style="font-size: 0.88rem; color: #cbd5e1;">Computer Science &amp; Engineering (AI/CV)</span>
+            </div>
+          </li>
+
+          <li class="contact-detail-item">
+            <div class="contact-icon-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <strong style="color: #ffffff; display: block; font-size: 0.95rem;">Technologies</strong>
+              <span style="font-size: 0.88rem; color: #cbd5e1;">Django 5.2 &bull; OpenCV &bull; MySQL &bull; HTML/CSS/JS</span>
+            </div>
+          </li>
+
+          <li class="contact-detail-item">
+            <div class="contact-icon-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <strong style="color: #ffffff; display: block; font-size: 0.95rem;">Database Storage</strong>
+              <span style="font-size: 0.88rem; color: #cbd5e1;">MySQL 8.0 (traffic_sign_db)</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quick Guidance Card -->
+      <div class="card">
+        <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--secondary);">Student Demonstration Note</h4>
+        <p style="font-size: 0.9rem; line-height: 1.55; color: var(--text-muted);">
+          To demonstrate this project during an viva examination or project evaluation:
+        </p>
+        <ol style="margin-left: 1.25rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.5rem;">
+          <li>Visit the <strong>Detection Studio</strong> page.</li>
+          <li>Choose an instant sample (e.g. Stop sign, Speed limit, Turn left).</li>
+          <li>Explain the <strong>HSV color mask</strong> and <strong>contour circularity</strong> metrics shown on the Result screen.</li>
+          <li>Open <strong>Detection History</strong> to show persistent MySQL database records!</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
